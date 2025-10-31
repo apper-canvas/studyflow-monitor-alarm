@@ -6,8 +6,9 @@ import ApperIcon from "@/components/ApperIcon";
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const navItems = [
+const navItems = [
     { path: "/", label: "Dashboard", icon: "LayoutDashboard" },
+    { path: "/students", label: "Students", icon: "Users" },
     { path: "/courses", label: "Courses", icon: "BookOpen" },
     { path: "/assignments", label: "Assignments", icon: "ClipboardList" },
     { path: "/schedule", label: "Schedule", icon: "Calendar" },

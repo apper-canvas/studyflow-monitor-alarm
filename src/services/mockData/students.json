@@ -1,0 +1,82 @@
+[
+  {
+    "Id": 1,
+    "name": "Emma Johnson",
+    "email": "emma.johnson@university.edu",
+    "major": "Computer Science",
+    "year": "Junior",
+    "gpa": 3.8,
+    "status": "Active",
+    "enrollmentDate": "2022-09-01"
+  },
+  {
+    "Id": 2,
+    "name": "Michael Chen",
+    "email": "michael.chen@university.edu",
+    "major": "Electrical Engineering",
+    "year": "Senior",
+    "gpa": 3.9,
+    "status": "Active",
+    "enrollmentDate": "2021-09-01"
+  },
+  {
+    "Id": 3,
+    "name": "Sarah Martinez",
+    "email": "sarah.martinez@university.edu",
+    "major": "Business Administration",
+    "year": "Sophomore",
+    "gpa": 3.6,
+    "status": "Active",
+    "enrollmentDate": "2023-09-01"
+  },
+  {
+    "Id": 4,
+    "name": "James Wilson",
+    "email": "james.wilson@university.edu",
+    "major": "Computer Science",
+    "year": "Freshman",
+    "gpa": 3.7,
+    "status": "Active",
+    "enrollmentDate": "2024-09-01"
+  },
+  {
+    "Id": 5,
+    "name": "Olivia Brown",
+    "email": "olivia.brown@university.edu",
+    "major": "Mechanical Engineering",
+    "year": "Junior",
+    "gpa": 3.5,
+    "status": "Active",
+    "enrollmentDate": "2022-09-01"
+  },
+  {
+    "Id": 6,
+    "name": "David Lee",
+    "email": "david.lee@university.edu",
+    "major": "Business Administration",
+    "year": "Senior",
+    "gpa": 3.4,
+    "status": "Inactive",
+    "enrollmentDate": "2021-09-01"
+  },
+  {
+    "Id": 7,
+    "name": "Sophia Taylor",
+    "email": "sophia.taylor@university.edu",
+    "major": "Computer Science",
+    "year": "Sophomore",
+    "gpa": 4.0,
+    "status": "Active",
+    "enrollmentDate": "2023-09-01"
+  },
+  {
+    "Id": 8,
+    "name": "Daniel Anderson",
+    "email": "daniel.anderson@university.edu",
+    "major": "Electrical Engineering",
+    "year": "Junior",
+    "gpa": 3.3,
+    "status": "Active",
+    "enrollmentDate": "2022-09-01"
+  }
+]
