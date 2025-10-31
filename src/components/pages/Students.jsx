@@ -47,27 +47,27 @@ function Students() {
   }
 
   function filterStudents() {
-    let filtered = [...students];
+let filtered = [...students];
 
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       filtered = filtered.filter(student =>
-        student.name.toLowerCase().includes(term) ||
-        student.email.toLowerCase().includes(term) ||
-        student.major.toLowerCase().includes(term)
+        (student.name_c || student.Name || '').toLowerCase().includes(term) ||
+        (student.email_c || '').toLowerCase().includes(term) ||
+        (student.major_c || '').toLowerCase().includes(term)
       );
     }
 
     if (majorFilter !== 'all') {
-      filtered = filtered.filter(student => student.major === majorFilter);
+      filtered = filtered.filter(student => student.major_c === majorFilter);
     }
 
     if (yearFilter !== 'all') {
-      filtered = filtered.filter(student => student.year === yearFilter);
+      filtered = filtered.filter(student => student.year_c === yearFilter);
     }
 
     if (statusFilter !== 'all') {
-      filtered = filtered.filter(student => student.status === statusFilter);
+      filtered = filtered.filter(student => student.status_c === statusFilter);
     }
 
     setFilteredStudents(filtered);
@@ -120,7 +120,7 @@ function Students() {
     setEditingStudent(null);
   }
 
-  const majors = [...new Set(students.map(s => s.major))];
+const majors = [...new Set(students.map(s => s.major_c).filter(Boolean))];
   const years = ['Freshman', 'Sophomore', 'Junior', 'Senior'];
 
   if (loading) {

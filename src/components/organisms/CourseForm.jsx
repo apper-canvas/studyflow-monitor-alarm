@@ -9,13 +9,13 @@ const PRESET_COLORS = [
 ];
 
 const CourseForm = ({ initialData, onSubmit, onCancel }) => {
-  const [formData, setFormData] = useState({
-    name: "",
-    code: "",
-    instructor: "",
-    color: PRESET_COLORS[0],
-    targetGrade: 90,
-    creditHours: 3,
+const [formData, setFormData] = useState({
+    name_c: "",
+    code_c: "",
+    instructor_c: "",
+    color_c: PRESET_COLORS[0],
+    target_grade_c: 90,
+    credit_hours_c: 3,
     gradeCategories: []
   });
 

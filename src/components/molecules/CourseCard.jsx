@@ -15,14 +15,14 @@ const CourseCard = ({ course, onEdit, onDelete }) => {
       transition={{ duration: 0.2 }}
       whileHover={{ y: -4 }}
     >
-      <Card className="p-6 border-l-4 cursor-pointer" style={{ borderLeftColor: course.color }}>
+<Card className="p-6 border-l-4 cursor-pointer" style={{ borderLeftColor: course.color_c }}>
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1" onClick={() => navigate(`/courses/${course.Id}`)}>
-            <h3 className="text-xl font-bold text-slate-900 mb-1">{course.name}</h3>
-            <p className="text-sm font-semibold text-slate-500 mb-2">{course.code}</p>
+<h3 className="text-xl font-bold text-slate-900 mb-1">{course.name_c || course.Name}</h3>
+            <p className="text-sm font-semibold text-slate-500 mb-2">{course.code_c}</p>
             <div className="flex items-center gap-2 text-sm text-slate-600">
               <ApperIcon name="User" size={14} />
-              <span>{course.instructor}</span>
+              <span>{course.instructor_c}</span>
             </div>
           </div>
           <div className="flex gap-2">
@@ -50,11 +50,11 @@ const CourseCard = ({ course, onEdit, onDelete }) => {
           <div className="flex items-center gap-4 text-sm">
             <div className="flex items-center gap-1.5">
               <ApperIcon name="Award" size={16} className="text-slate-500" />
-              <span className="font-semibold text-slate-700">{course.creditHours} credits</span>
+<span className="font-semibold text-slate-700">{course.credit_hours_c} credits</span>
             </div>
             <div className="flex items-center gap-1.5">
               <ApperIcon name="Target" size={16} className="text-slate-500" />
-              <span className="font-semibold text-slate-700">Target: {course.targetGrade}%</span>
+              <span className="font-semibold text-slate-700">Target: {course.target_grade_c}%</span>
             </div>
           </div>
         </div>

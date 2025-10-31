@@ -49,21 +49,19 @@ const Schedule = () => {
   if (loading) return <Loading />;
   if (error) return <Error message={error} onRetry={loadData} />;
 
-  const getScheduleForDay = (day) => {
-    return schedules.filter(s => s.dayOfWeek === day);
+const getScheduleForDay = (day) => {
+    return schedules.filter(s => (s.day_of_week_c || s.dayOfWeek) === day);
   };
-
   const getAssignmentsForDay = (day) => {
-    const weekStart = startOfWeek(new Date(), { weekStartsOn: 1 });
+const weekStart = startOfWeek(new Date(), { weekStartsOn: 1 });
     const dayIndex = DAYS.indexOf(day);
     const targetDate = addDays(weekStart, dayIndex);
     
     return assignments.filter(a => {
-      const dueDate = new Date(a.dueDate);
+      const dueDate = new Date(a.due_date_c || a.dueDate);
       return format(dueDate, "yyyy-MM-dd") === format(targetDate, "yyyy-MM-dd");
     });
   };
-
   if (schedules.length === 0) {
     return (
       <div className="space-y-8">
@@ -106,27 +104,27 @@ const Schedule = () => {
             <div className="p-4 bg-slate-50 font-medium text-slate-600 text-sm">
               {time}
             </div>
-            {DAYS.map((day) => {
+{DAYS.map((day) => {
               const daySchedules = getScheduleForDay(day);
-              const relevantSchedule = daySchedules.find(s => s.startTime === time);
+              const relevantSchedule = daySchedules.find(s => (s.start_time_c || s.startTime) === time);
               
               return (
                 <div key={`${day}-${time}`} className="p-2 border-l border-slate-200">
                   {relevantSchedule && (() => {
-                    const course = courses.find(c => c.Id === relevantSchedule.courseId);
+                    const course = courses.find(c => c.Id === (relevantSchedule.course_id_c?.Id || relevantSchedule.courseId));
                     return course ? (
                       <Card
                         className="p-3 h-full border-l-4 hover:scale-102 transition-transform duration-200"
-                        style={{ borderLeftColor: course.color }}
+                        style={{ borderLeftColor: course.color_c }}
                       >
-                        <p className="font-bold text-sm text-slate-900 mb-1">{course.code}</p>
-                        <p className="text-xs text-slate-600 mb-1">{course.name}</p>
+                        <p className="font-bold text-sm text-slate-900 mb-1">{course.code_c}</p>
+                        <p className="text-xs text-slate-600 mb-1">{course.name_c || course.Name}</p>
                         <div className="flex items-center gap-1 text-xs text-slate-500">
                           <ApperIcon name="MapPin" size={12} />
-                          <span className="truncate">{relevantSchedule.location}</span>
+                          <span className="truncate">{relevantSchedule.location_c || relevantSchedule.location}</span>
                         </div>
                         <p className="text-xs text-slate-500 mt-1">
-                          {relevantSchedule.startTime} - {relevantSchedule.endTime}
+                          {relevantSchedule.start_time_c || relevantSchedule.startTime} - {relevantSchedule.end_time_c || relevantSchedule.endTime}
                         </p>
                       </Card>
                     ) : null;
@@ -151,20 +149,20 @@ const Schedule = () => {
                   <p className="text-sm text-slate-500">No assignments</p>
                 ) : (
                   <div className="space-y-2">
-                    {dayAssignments.map((assignment) => {
-                      const course = courses.find(c => c.Id === assignment.courseId);
+{dayAssignments.map((assignment) => {
+                      const course = courses.find(c => c.Id === (assignment.course_id_c?.Id || assignment.courseId));
                       return (
                         <div
                           key={assignment.Id}
                           className="p-2 bg-slate-50 rounded-lg border-l-2"
-                          style={{ borderLeftColor: course?.color || "#6366f1" }}
+                          style={{ borderLeftColor: course?.color_c || "#6366f1" }}
                         >
                           <p className="text-sm font-semibold text-slate-900 mb-1 line-clamp-2">
-                            {assignment.title}
+                            {assignment.title_c || assignment.Name}
                           </p>
                           {course && (
-                            <Badge style={{ backgroundColor: `${course.color}20`, color: course.color }}>
-                              {course.code}
+                            <Badge style={{ backgroundColor: `${course.color_c}20`, color: course.color_c }}>
+                              {course.code_c}
                             </Badge>
                           )}
                         </div>

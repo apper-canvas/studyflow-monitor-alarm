@@ -45,21 +45,20 @@ const Dashboard = () => {
   const now = new Date();
   const weekFromNow = addDays(now, 7);
 
-  const upcomingAssignments = assignments.filter(
-    a => !a.completed && isAfter(new Date(a.dueDate), now) && isBefore(new Date(a.dueDate), weekFromNow)
-  ).sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+const upcomingAssignments = assignments.filter(
+    a => !a.completed_c && isAfter(new Date(a.due_date_c), now) && isBefore(new Date(a.due_date_c), weekFromNow)
+  ).sort((a, b) => new Date(a.due_date_c) - new Date(b.due_date_c));
 
   const overdueAssignments = assignments.filter(
-    a => !a.completed && isBefore(new Date(a.dueDate), now)
+    a => !a.completed_c && isBefore(new Date(a.due_date_c), now)
   );
-
   const completedCount = assignments.filter(a => a.completed).length;
   const totalCount = assignments.length;
   const completionRate = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
   const courseGrades = courses.map(course => {
-    const courseAssignments = assignments.filter(
-      a => a.courseId === course.Id && a.completed && a.grade !== null
+const courseAssignments = assignments.filter(
+      a => (a.course_id_c?.Id || a.courseId) === course.Id && a.completed_c && a.grade_c !== null
     );
     
     if (courseAssignments.length === 0) return null;
@@ -188,27 +187,27 @@ const Dashboard = () => {
             <div className="space-y-4">
               {courseGrades.map(({ course, grade }) => (
                 <Card
-                  key={course.Id}
+key={course.Id}
                   className="p-6 border-l-4 cursor-pointer hover:scale-102 transition-transform duration-200"
-                  style={{ borderLeftColor: course.color }}
+                  style={{ borderLeftColor: course.color_c }}
                   onClick={() => navigate(`/courses/${course.Id}`)}
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div>
-                      <h3 className="font-bold text-slate-900 text-lg">{course.code}</h3>
-                      <p className="text-sm text-slate-600">{course.name}</p>
+                      <h3 className="font-bold text-slate-900 text-lg">{course.code_c}</h3>
+                      <p className="text-sm text-slate-600">{course.name_c || course.Name}</p>
                     </div>
                     <div className="text-right">
                       <div className="text-3xl font-bold text-slate-900">{grade}%</div>
-                      <div className="text-xs text-slate-500">Target: {course.targetGrade}%</div>
+                      <div className="text-xs text-slate-500">Target: {course.target_grade_c}%</div>
                     </div>
                   </div>
                   <div className="w-full bg-slate-200 rounded-full h-2">
                     <div
                       className="h-2 rounded-full transition-all duration-500"
                       style={{
-                        width: `${Math.min((grade / course.targetGrade) * 100, 100)}%`,
-                        backgroundColor: grade >= course.targetGrade ? "#10b981" : course.color
+width: `${Math.min((grade / course.target_grade_c) * 100, 100)}%`,
+                        backgroundColor: grade >= course.target_grade_c ? "#10b981" : course.color_c
                       }}
                     />
                   </div>

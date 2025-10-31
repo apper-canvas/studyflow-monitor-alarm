@@ -17,14 +17,14 @@ function StudentForm({ isOpen, onClose, onSubmit, student }) {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    if (student) {
+if (student) {
       setFormData({
-        name: student.name || '',
-        email: student.email || '',
-        major: student.major || '',
-        year: student.year || 'Freshman',
-        gpa: student.gpa?.toString() || '',
-        status: student.status || 'Active'
+        name_c: student.name_c || student.Name || '',
+        email_c: student.email_c || '',
+        major_c: student.major_c || '',
+        year_c: student.year_c || 'Freshman',
+        gpa_c: student.gpa_c?.toString() || '',
+        status_c: student.status_c || 'Active'
       });
     } else {
       setFormData({
@@ -77,8 +77,8 @@ function StudentForm({ isOpen, onClose, onSubmit, student }) {
     }
 
     const submitData = {
-      ...formData,
-      gpa: parseFloat(formData.gpa)
+...formData,
+      gpa_c: parseFloat(formData.gpa_c)
     };
 
     onSubmit(submitData);

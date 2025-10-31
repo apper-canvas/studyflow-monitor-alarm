@@ -97,12 +97,12 @@ const Assignments = () => {
   if (error) return <Error message={error} onRetry={loadData} />;
 
   const filteredAssignments = assignments
-    .filter(a => filterCourse === "all" || a.courseId === parseInt(filterCourse))
+.filter(a => filterCourse === "all" || (a.course_id_c?.Id || a.courseId) === parseInt(filterCourse))
     .filter(a => {
       if (filterStatus === "all") return true;
-      if (filterStatus === "completed") return a.completed;
-      if (filterStatus === "pending") return !a.completed;
-      if (filterStatus === "overdue") return !a.completed && new Date(a.dueDate) < new Date();
+      if (filterStatus === "completed") return a.completed_c;
+      if (filterStatus === "pending") return !a.completed_c;
+      if (filterStatus === "overdue") return !a.completed_c && new Date(a.due_date_c || a.dueDate) < new Date();
       return true;
     })
     .filter(a => filterPriority === "all" || a.priority === filterPriority)
@@ -130,8 +130,8 @@ const Assignments = () => {
           >
             <option value="all">All Courses</option>
             {courses.map((course) => (
-              <option key={course.Id} value={course.Id}>
-                {course.code} - {course.name}
+<option key={course.Id} value={course.Id}>
+                {course.code_c} - {course.name_c || course.Name}
               </option>
             ))}
           </Select>
@@ -172,7 +172,7 @@ const Assignments = () => {
       ) : (
         <div className="space-y-4">
           {filteredAssignments.map((assignment) => {
-            const course = courses.find(c => c.Id === assignment.courseId);
+const course = courses.find(c => c.Id === (assignment.course_id_c?.Id || assignment.courseId));
             return (
               <AssignmentCard
                 key={assignment.Id}

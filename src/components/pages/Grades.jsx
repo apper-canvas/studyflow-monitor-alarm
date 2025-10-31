@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { courseService } from "@/services/api/courseService";
 import { assignmentService } from "@/services/api/assignmentService";
-import Loading from "@/components/ui/Loading";
-import Error from "@/components/ui/Error";
-import Empty from "@/components/ui/Empty";
-import Card from "@/components/atoms/Card";
-import Badge from "@/components/atoms/Badge";
 import ApperIcon from "@/components/ApperIcon";
+import Badge from "@/components/atoms/Badge";
+import Card from "@/components/atoms/Card";
+import Courses from "@/components/pages/Courses";
+import Assignments from "@/components/pages/Assignments";
+import Loading from "@/components/ui/Loading";
+import Empty from "@/components/ui/Empty";
+import Error from "@/components/ui/Error";
 
 const Grades = () => {
 const [courses, setCourses] = useState([]);
@@ -39,22 +41,22 @@ const loadData = async () => {
     loadData();
   }, []);
 
-  const calculateOverallGPA = (semesterFilter = "all") => {
+const calculateOverallGPA = (semesterFilter = "all") => {
     const filteredCourses = semesterFilter === "all" 
       ? courses 
       : courses.filter(c => c.semester === semesterFilter);
 
     const coursesWithGrades = filteredCourses.map(course => {
       const courseAssignments = assignments.filter(
-        a => a.courseId === course.Id && a.completed && a.grade !== null
+        a => (a.course_id_c?.Id || a.courseId) === course.Id && a.completed_c && a.grade_c !== null
       );
 
       if (courseAssignments.length === 0 || !course.gradeCategories) return null;
 
       const categoryGrades = course.gradeCategories.map(category => {
-        const categoryAssignments = courseAssignments.filter(a => a.category === category.name);
+        const categoryAssignments = courseAssignments.filter(a => (a.category_c || a.category) === category.name);
         if (categoryAssignments.length === 0) return { weight: category.weight, weightedScore: 0 };
-        const average = categoryAssignments.reduce((sum, a) => sum + a.grade, 0) / categoryAssignments.length;
+        const average = categoryAssignments.reduce((sum, a) => sum + a.grade_c, 0) / categoryAssignments.length;
         return { weight: category.weight, weightedScore: (average * category.weight) / 100 };
       });
 
@@ -65,7 +67,7 @@ const loadData = async () => {
       return {
         ...course,
         finalGrade: Math.round(adjustedGrade * 10) / 10,
-        credits: course.credits || 3
+        credits: course.credit_hours_c || 3
       };
     }).filter(Boolean);
 
@@ -105,15 +107,14 @@ const semesters = [...new Set(courses.map(c => c.semester).filter(Boolean))].sor
   const overallGPAData = calculateOverallGPA(selectedSemester);
   const currentCourse = courses.find(c => c.Id === selectedCourse);
   const courseAssignments = assignments.filter(
-    a => a.courseId === selectedCourse && a.completed && a.grade !== null
+    a => (a.course_id_c?.Id || a.courseId) === selectedCourse && a.completed_c && a.grade_c !== null
   );
-
-  const calculateGradeByCategory = () => {
+const calculateGradeByCategory = () => {
     if (!currentCourse || !currentCourse.gradeCategories) return [];
 
     return currentCourse.gradeCategories.map(category => {
       const categoryAssignments = courseAssignments.filter(
-        a => a.category === category.name
+        a => (a.category_c || a.category) === category.name
       );
 
       if (categoryAssignments.length === 0) {
@@ -126,7 +127,7 @@ const semesters = [...new Set(courses.map(c => c.semester).filter(Boolean))].sor
         };
       }
 
-      const average = categoryAssignments.reduce((sum, a) => sum + a.grade, 0) / categoryAssignments.length;
+      const average = categoryAssignments.reduce((sum, a) => sum + a.grade_c, 0) / categoryAssignments.length;
       const weightedScore = (average * category.weight) / 100;
 
       return {
@@ -143,7 +144,6 @@ const semesters = [...new Set(courses.map(c => c.semester).filter(Boolean))].sor
   const currentGrade = categoryGrades.reduce((sum, cat) => sum + cat.weightedScore, 0);
   const totalWeight = categoryGrades.reduce((sum, cat) => cat.count > 0 ? sum + cat.weight : sum, 0);
   const adjustedGrade = totalWeight > 0 ? (currentGrade / totalWeight) * 100 : 0;
-
   return (
 <div className="space-y-8">
       <div>
@@ -212,7 +212,7 @@ const semesters = [...new Set(courses.map(c => c.semester).filter(Boolean))].sor
             <Card className="p-6">
               <h2 className="text-2xl font-bold text-slate-900 mb-6">Course Grades</h2>
               <div className="space-y-3">
-                {overallGPAData.coursesWithGrades.map((course) => {
+{overallGPAData.coursesWithGrades.map((course) => {
                   const letterGrade = course.finalGrade >= 93 ? "A" :
                                      course.finalGrade >= 90 ? "A-" :
                                      course.finalGrade >= 87 ? "B+" :
@@ -245,11 +245,11 @@ const semesters = [...new Set(courses.map(c => c.semester).filter(Boolean))].sor
                       <div className="flex items-center gap-4 flex-1">
                         <div 
                           className="w-2 h-14 rounded-full"
-                          style={{ backgroundColor: course.color }}
+                          style={{ backgroundColor: course.color_c }}
                         />
                         <div>
-                          <p className="font-bold text-slate-900 mb-1">{course.code}</p>
-                          <p className="text-sm text-slate-600">{course.name}</p>
+                          <p className="font-bold text-slate-900 mb-1">{course.code_c}</p>
+                          <p className="text-sm text-slate-600">{course.name_c || course.Name}</p>
                           {course.semester && (
                             <Badge variant="default" className="mt-1">{course.semester}</Badge>
                           )}
@@ -290,7 +290,7 @@ const semesters = [...new Set(courses.map(c => c.semester).filter(Boolean))].sor
           <div className="flex flex-wrap gap-3">
             {courses.map((course) => (
               <button
-                key={course.Id}
+key={course.Id}
                 onClick={() => setSelectedCourse(course.Id)}
                 className={`px-6 py-3 rounded-xl font-semibold transition-all duration-200 ${
                   selectedCourse === course.Id
@@ -299,11 +299,11 @@ const semesters = [...new Set(courses.map(c => c.semester).filter(Boolean))].sor
                 }`}
                 style={
                   selectedCourse === course.Id
-                    ? { background: `linear-gradient(135deg, ${course.color} 0%, ${course.color}dd 100%)` }
+                    ? { background: `linear-gradient(135deg, ${course.color_c} 0%, ${course.color_c}dd 100%)` }
                     : {}
                 }
               >
-                {course.code}
+                {course.code_c}
               </button>
             ))}
           </div>
@@ -313,10 +313,10 @@ const semesters = [...new Set(courses.map(c => c.semester).filter(Boolean))].sor
 {currentCourse && (
         <>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="p-6 border-l-4" style={{ borderLeftColor: currentCourse.color }}>
+            <Card className="p-6 border-l-4" style={{ borderLeftColor: currentCourse.color_c }}>
               <div className="flex items-center gap-3 mb-4">
-                <div className="p-3 rounded-xl" style={{ backgroundColor: `${currentCourse.color}20` }}>
-                  <ApperIcon name="TrendingUp" size={24} style={{ color: currentCourse.color }} />
+                <div className="p-3 rounded-xl" style={{ backgroundColor: `${currentCourse.color_c}20` }}>
+                  <ApperIcon name="TrendingUp" size={24} style={{ color: currentCourse.color_c }} />
                 </div>
                 <p className="font-semibold text-slate-600">Current Grade</p>
               </div>
@@ -333,7 +333,7 @@ const semesters = [...new Set(courses.map(c => c.semester).filter(Boolean))].sor
                 <p className="font-semibold text-slate-600">Target Grade</p>
               </div>
               <p className="text-4xl font-bold text-slate-900">
-                {currentCourse.targetGrade}%
+                {currentCourse.target_grade_c}%
               </p>
             </Card>
 
@@ -361,7 +361,7 @@ const semesters = [...new Set(courses.map(c => c.semester).filter(Boolean))].sor
               />
             ) : (
               <div className="space-y-6">
-                {categoryGrades.map((category) => (
+{categoryGrades.map((category) => (
                   <div key={category.name}>
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-3">
@@ -387,7 +387,7 @@ const semesters = [...new Set(courses.map(c => c.semester).filter(Boolean))].sor
                         className="h-3 rounded-full transition-all duration-500"
                         style={{
                           width: `${category.count > 0 ? category.average : 0}%`,
-                          backgroundColor: currentCourse.color
+                          backgroundColor: currentCourse.color_c
                         }}
                       />
                     </div>
@@ -401,19 +401,19 @@ const semesters = [...new Set(courses.map(c => c.semester).filter(Boolean))].sor
             <Card className="p-6">
               <h2 className="text-2xl font-bold text-slate-900 mb-6">Recent Graded Assignments</h2>
               <div className="space-y-3">
-                {courseAssignments.slice(0, 10).map((assignment) => (
+{courseAssignments.slice(0, 10).map((assignment) => (
                   <div
                     key={assignment.Id}
                     className="flex items-center justify-between p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors duration-200"
                   >
                     <div className="flex-1">
-                      <p className="font-semibold text-slate-900 mb-1">{assignment.title}</p>
-                      {assignment.category && (
-                        <Badge variant="default">{assignment.category}</Badge>
+                      <p className="font-semibold text-slate-900 mb-1">{assignment.title_c || assignment.Name}</p>
+                      {assignment.category_c && (
+                        <Badge variant="default">{assignment.category_c}</Badge>
                       )}
                     </div>
                     <div className="text-right">
-                      <p className="text-2xl font-bold text-slate-900">{assignment.grade}%</p>
+                      <p className="text-2xl font-bold text-slate-900">{assignment.grade_c}%</p>
                     </div>
                   </div>
                 ))}

@@ -33,9 +33,9 @@ function StudentCard({ student, onEdit, onDelete }) {
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <h3 className="text-lg font-display font-semibold text-slate-900 group-hover:text-primary transition-colors">
-              {student.name}
+{student.name_c || student.Name}
             </h3>
-            <p className="text-sm text-slate-600 mt-1">{student.email}</p>
+            <p className="text-sm text-slate-600 mt-1">{student.email_c}</p>
           </div>
           <Badge variant={getStatusVariant(student.status)}>
             {student.status}
@@ -45,21 +45,21 @@ function StudentCard({ student, onEdit, onDelete }) {
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-sm">
             <ApperIcon name="GraduationCap" size={16} className="text-slate-400" />
-            <span className="font-medium text-slate-700">{student.major}</span>
+<span className="font-medium text-slate-700">{student.major_c}</span>
           </div>
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <ApperIcon name="Calendar" size={16} className="text-slate-400" />
-              <span className={`text-sm font-medium px-2 py-1 rounded-md ${getYearColor(student.year)}`}>
-                {student.year}
+<span className={`text-sm font-medium px-2 py-1 rounded-md ${getYearColor(student.year_c)}`}>
+                {student.year_c}
               </span>
             </div>
 
             <div className="flex items-center gap-2">
               <ApperIcon name="Award" size={16} className="text-slate-400" />
-              <span className={`text-sm font-semibold ${getGPAColor(student.gpa)}`}>
-                {student.gpa.toFixed(2)} GPA
+              <span className={`text-sm font-semibold ${getGPAColor(student.gpa_c)}`}>
+                {student.gpa_c?.toFixed(2)} GPA
               </span>
             </div>
           </div>

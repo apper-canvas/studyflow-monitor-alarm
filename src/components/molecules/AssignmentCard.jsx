@@ -6,8 +6,8 @@ import Card from "@/components/atoms/Card";
 import Badge from "@/components/atoms/Badge";
 
 const AssignmentCard = ({ assignment, course, onToggle, onEdit, onDelete }) => {
-  const isOverdue = new Date(assignment.dueDate) < new Date() && !assignment.completed;
-  const dueDate = format(new Date(assignment.dueDate), "MMM dd, yyyy h:mm a");
+const isOverdue = new Date(assignment.due_date_c || assignment.dueDate) < new Date() && !assignment.completed_c;
+  const dueDate = format(new Date(assignment.due_date_c || assignment.dueDate), "MMM dd, yyyy h:mm a");
 
   const priorityColors = {
     high: "text-error",
@@ -28,11 +28,11 @@ const AssignmentCard = ({ assignment, course, onToggle, onEdit, onDelete }) => {
             className="mt-1 flex-shrink-0"
           >
             <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
-              assignment.completed 
+assignment.completed_c 
                 ? "bg-success border-success" 
                 : "border-slate-300 hover:border-success"
             }`}>
-              {assignment.completed && (
+              {assignment.completed_c && (
                 <ApperIcon name="Check" size={16} className="text-white" />
               )}
             </div>
@@ -40,21 +40,21 @@ const AssignmentCard = ({ assignment, course, onToggle, onEdit, onDelete }) => {
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-4 mb-3">
               <div className="flex-1">
-                <h3 className={`text-lg font-bold mb-2 ${assignment.completed ? "line-through text-slate-500" : "text-slate-900"}`}>
-                  {assignment.title}
+<h3 className={`text-lg font-bold mb-2 ${assignment.completed_c ? "line-through text-slate-500" : "text-slate-900"}`}>
+                  {assignment.title_c || assignment.Name}
                 </h3>
                 <div className="flex flex-wrap items-center gap-3">
-                  {course && (
-                    <Badge style={{ backgroundColor: `${course.color}20`, color: course.color }}>
-                      {course.code}
+{course && (
+                    <Badge style={{ backgroundColor: `${course.color_c}20`, color: course.color_c }}>
+                      {course.code_c}
                     </Badge>
                   )}
-                  <Badge variant={assignment.priority}>
-                    <ApperIcon name="AlertCircle" size={12} className={priorityColors[assignment.priority]} />
-                    {assignment.priority}
+                  <Badge variant={assignment.priority_c || assignment.priority}>
+                    <ApperIcon name="AlertCircle" size={12} className={priorityColors[assignment.priority_c || assignment.priority]} />
+                    {assignment.priority_c || assignment.priority}
                   </Badge>
-                  {assignment.category && (
-                    <Badge variant="default">{assignment.category}</Badge>
+                  {assignment.category_c && (
+                    <Badge variant="default">{assignment.category_c}</Badge>
                   )}
                 </div>
               </div>
@@ -73,8 +73,9 @@ const AssignmentCard = ({ assignment, course, onToggle, onEdit, onDelete }) => {
                 </button>
               </div>
             </div>
-            {assignment.description && (
+{assignment.description_c && (
               <p className="text-sm text-slate-600 mb-3 line-clamp-2">
+                {assignment.description_c}
                 {assignment.description}
               </p>
             )}
@@ -85,12 +86,12 @@ const AssignmentCard = ({ assignment, course, onToggle, onEdit, onDelete }) => {
                 {isOverdue && " (Overdue)"}
               </span>
             </div>
-            {assignment.completed && assignment.grade && (
+{assignment.completed_c && assignment.grade_c && (
               <div className="mt-3 pt-3 border-t border-slate-100">
                 <div className="flex items-center gap-2">
                   <ApperIcon name="Award" size={14} className="text-success" />
                   <span className="text-sm font-semibold text-success">
-                    Grade: {assignment.grade}%
+                    Grade: {assignment.grade_c}%
                   </span>
                 </div>
               </div>

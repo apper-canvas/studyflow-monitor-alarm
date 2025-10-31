@@ -7,23 +7,24 @@ import Button from "@/components/atoms/Button";
 import ApperIcon from "@/components/ApperIcon";
 
 const AssignmentForm = ({ initialData, courses, onSubmit, onCancel }) => {
-  const [formData, setFormData] = useState({
-    courseId: "",
-    title: "",
-    description: "",
-    dueDate: "",
-    priority: "medium",
-    category: ""
+const [formData, setFormData] = useState({
+    course_id_c: "",
+    title_c: "",
+    description_c: "",
+    due_date_c: "",
+    priority_c: "medium",
+    category_c: ""
   });
 
   useEffect(() => {
     if (initialData) {
       setFormData({
-        ...initialData,
-        dueDate: format(new Date(initialData.dueDate), "yyyy-MM-dd'T'HH:mm")
+...initialData,
+        course_id_c: initialData.course_id_c?.Id || initialData.courseId || initialData.course_id_c,
+        due_date_c: format(new Date(initialData.due_date_c || initialData.dueDate), "yyyy-MM-dd'T'HH:mm")
       });
     } else if (courses.length > 0) {
-      setFormData(prev => ({ ...prev, courseId: courses[0].Id }));
+      setFormData(prev => ({ ...prev, course_id_c: courses[0].Id }));
     }
   }, [initialData, courses]);
 
@@ -31,11 +32,11 @@ const AssignmentForm = ({ initialData, courses, onSubmit, onCancel }) => {
     e.preventDefault();
     onSubmit({
       ...formData,
-      courseId: parseInt(formData.courseId)
+course_id_c: parseInt(formData.course_id_c)
     });
   };
 
-  const selectedCourse = courses.find(c => c.Id === parseInt(formData.courseId));
+const selectedCourse = courses.find(c => c.Id === parseInt(formData.course_id_c));
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
