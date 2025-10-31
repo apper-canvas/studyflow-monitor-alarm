@@ -56,7 +56,7 @@ className={({ isActive }) =>
                 <span>{item.label}</span>
               </NavLink>
             ))}
-            {user && (
+{user && (
               <button
                 onClick={handleLogout}
                 className="flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors duration-200 text-red-600 hover:text-red-700 hover:bg-red-50"
@@ -64,7 +64,7 @@ className={({ isActive }) =>
                 <ApperIcon name="LogOut" size={18} />
                 <span>Logout</span>
               </button>
-            ))}
+            )}
           </nav>
 
           <button
